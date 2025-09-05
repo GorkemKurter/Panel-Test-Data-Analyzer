@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rapor Analiz</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 100vh;
+    }
+    form {
+      width: 350px;
+      margin: 0 auto;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 40px;
+    }
+    h1 {
+      color: #90caf9;
+      text-align: center;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    .file-input {
+      width: 60%;
+      min-width: 120px;
+      max-width: 200px;
+      padding: 3px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      background: #121212;
+      color: #e0e0e0;
+      font-size: 13px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #90caf9;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #42a5f5;
+    }
+  </style>
+</head>
+<body>
+  <img src="/static/vestel_logo.png" alt="Logo" class="logo" />
+  <div class="container">
+    <h1>Panel Veri Analiz</h1>
+    <form method="post" action="/analyze" enctype="multipart/form-data">
+      <label>Analiz için .csv, .txt, xlsx uzantılı bir dosya ekleyip, veri sütunlarını belirtin.</label>
+      <label> </label>
+      <input type="file" name="file" required class="file-input">
+
+      <label>Devir</label>
+      <select name="rpm" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'A' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Su valf</label>
+      <select name="su_valf" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'B' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Su toplam</label>
+      <select name="su_toplam" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'D' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Sıcaklık</label>
+      <select name="sicaklik" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'P' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Tahliye</label>
+      <select name="tahliye" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'AF' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Twinjet pompası</label>
+      <select name="twinjet" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'AG' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Resistans</label>
+      <select name="resistans" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'AK' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Zaman</label>
+      <select name="zaman" required>
+        {% for col in columns %}
+          <option value="{{ col }}" {% if col == 'AN' %}selected{% endif %}>{{ col }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Analiz Et</button>
+    </form>
+  </div>
+</body>
+</html>

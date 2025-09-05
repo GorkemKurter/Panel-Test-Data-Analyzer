@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Analiz Sonuçları</title>
+  <style>
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      background: #161b22;
+      padding: 15px 40px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    }
+    header img {
+      height: 45px;
+      margin-right: 15px;
+    }
+    header h1 {
+      font-size: 26px;
+      color: #58a6ff;
+      margin: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .section {
+      background: #161b22;
+      margin-bottom: 25px;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .section:hover {
+      transform: translateY(-3px);
+    }
+    .section h2 {
+      color: #ec3a40;
+      margin-bottom: 15px;
+      font-size: 24px;
+      border-bottom: 2px solid #30363d;
+      padding-bottom: 8px;
+    }
+    .result-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .result-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #30363d;
+      font-size: 16px;
+    }
+    .result-list li:last-child {
+      border-bottom: none;
+    }
+    .field-label {
+      display: inline-block;
+      font-weight: bold;
+      color: #ec3a40;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    i {
+      color: #8b949e;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/static/vestel_logo.png" alt="Logo">
+    <h1>Analiz Sonuçları</h1>
+  </header>
+
+  <div class="container">
+    <!-- Sıcaklık & Komponent -->
+    <div class="section">
+      <h2>Sıcaklık & Komponent</h2>
+      <ul class="result-list">
+        <li><span class="field-label">Maksimum Sıcaklık:</span> {{ result.sicaklik_komponent.max_sicaklik }}</li>
+        <li><span class="field-label">Resistans Süresi:</span> {{ result.sicaklik_komponent.resistans_sure }}</li>
+        <li><span class="field-label">Tahliye RPM:</span> {{ result.sicaklik_komponent.tahliye_rpm }}</li>
+        <li><span class="field-label">Twinjet Açık Süre:</span> {{ result.sicaklik_komponent.twinjet.on_sure }}</li>
+        <li><span class="field-label">Twinjet Kapalı Süre:</span> {{ result.sicaklik_komponent.twinjet.off_sure }}</li>
+      </ul>
+    </div>
+
+    <!-- Su Raporu -->
+    <div class="section">
+      <h2>Su Raporu</h2>
+      <ul class="result-list">
+        <li>
+          <span class="field-label">Lokal Valf Aktivasyonları:</span><br>
+          <i>#Her bir değer saniyelik debiyi temsil etmektedir.</i><br>
+          {{ result.su_raporu.lokal_valf_aktivasyonları | safe }}
+        </li>
+        <li>
+          <span class="field-label">Valf Çalışma Süreleri:</span><br>
+          <i>#Her bir aktivasyonun kaç saniye sürdüğünü gösterir.</i><br>
+          {{ result.su_raporu.valf_çalışma_süreleri }}
+        </li>
+        <li>
+          <span class="field-label">Aktivasyon Adımlarında Su Tüketimi:</span><br>
+          <i>#Sırasıyla, adımlar sonunda tüketilen su miktarı.</i><br>
+          {{ result.su_raporu.lokal_su_tüketimi }}
+        </li>
+        <li>
+          <span class="field-label">Toplam Su Tüketimi:</span> {{ result.su_raporu.toplam_su_tüketimi }}
+        </li>
+        <li>
+          <span class="field-label">Toplam Valf Aktivasyon Süresi:</span> {{ result.su_raporu.toplam_valf_aktivasyonu }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Motor Hareketi -->
+    <div class="section">
+      <h2>Motor Hareketi</h2>
+      <ul class="result-list">
+        <li>
+          <span class="field-label">Maksimum RPM:</span><br>
+          {{ result.motor_hareketi.max_rpm }}
+        </li>
+        <li>
+          <span class="field-label">Maksimum RPM Süresi:</span><br>
+          {{ result.motor_hareketi.max_rpm_sure }}
+        </li>
+        <li>
+          <span class="field-label">Motor Devir Listesi:</span><br>
+          <i>#Ajitasyon süresince saniyelik rpm bilgisi.</i><br>
+          {{ result.motor_hareketi.motor_devir | safe }}
+        </li>
+        <li>
+          <span class="field-label">Motor Süreleri:</span><br>
+          <i>#Ajitasyon süreleri (örn. 1. ajitasyon x saniye sürdü).</i><br>
+          {{ result.motor_hareketi.motor_sure | safe }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

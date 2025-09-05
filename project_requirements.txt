@@ -1,0 +1,35 @@
+Bu kısım tamamlandıktan sonra algoritma tanımlanarak bu verilerin otomatik karşılaştırması ve pass/fail olarak belirtmesi gibi diğer bir çalışma da yapılabilir.
+
+Veriler ve birimleri şu şekildedir;
+
+1.	Devir (rpm) : A sütunu
+2.	Su valf : B sütunu
+3.	Su toplam (lt) : D sütunu
+4.	Sıcaklık (°C) : P sütunu
+5.	Tahliye (on/off dk) : AF sütunu
+6.	Twinjet pompası (on/off sn) : AG sütunu
+7.	Resistans (on/off dk) : AK sütunu
+8.	Zaman (sn) : AN sütunu
+
+Analiz edilen sonuçlar için 3 farklı rapor sayfası olabilir. 
+
+Sıcaklık-Komponent Rapor 1
+1.	Sıcaklık: Max su sıcaklığı ve resistans çalışma süresi
+a.	Max sıcaklık: P sütunundaki max değer
+b.	Resistans çalışma süresi: AK sütunundaki aktivasyon süresi
+2.	Tahliye: Tahliye pompası çalıştığı andaki tambur dönüş hızı: Rpm 100’den büyük olduğu durumlar için tahliyenin 0’dan 1’e geçişteki Rpm karşılığı
+3.	Twinjet pompası: Pompa on/off süresi ve toplam çalışma süresi
+
+Su Rapor 2
+4.	Su valf: B sütunundaki verilerden 0’dan farklı olan ve 0 olanların süresi
+5.	Su toplam: B sütunundaki verilerden 0 olduğu andaki 0’dan farklı son D sütunu verisi
+
+Motor Hareketi Rapor 3
+6.	Max sıkma hızı ve kalış süresi: 
+a.	Max sıkma hızı: A sütunundaki verilerden max değer
+b.	Max hızda kalış süresi: A sütunundaki verilerin max değerlerin toplam süresi 
+7.	Motor hareketi: 
+a.	Motor hareketi devir: A sütunundaki verilerin 0’dan farklı ilk değer ve 0’a ulaştığı değer arasındaki max değer
+b.	Motor hareketi süre: A sütunundaki verilerin 0’dan farklı ilk değer ve 0’a ulaştığı değer arasındaki süre
+
+Not: Analiz işlemi öncesi hangi verinin exceldeki hangi sütundan çekeceğinin bizim tarafımızdan tanımlanması ilerideki veri değişiklikleri için faydalı olacaktır.
