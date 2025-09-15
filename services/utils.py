@@ -1,5 +1,5 @@
 import plotly.express as px
-
+import pandas as pd
 def format_valf_aktivasyon(data: dict) -> str:
     formatted_lines = []
     for key, values in data.items():
@@ -19,16 +19,31 @@ def np_solver_lt(data: list) -> str:
 def np_solver_rpm(data: list) -> str:
     return " rpm , ".join(map(str, [float(x) for x in data])) + " rpm"
 
-def graph_plotter(x, title):
-    fig = px.line(
-        x = x,
-        y = len(x) // 60,
-        title = title
-    )
-    graph_html = fig.to_html(full_html=True)
-    
-    return graph_html
+def graph_plotter(df, param, title):
 
+    if isinstance(df, pd.DataFrame) or isinstance(df, pd.Series):
+        if df.all() is not None:
+            for i in range(len(param)):
+                if isinstance(df, pd.DataFrame):
+                    df = df.rename(columns={df.columns[i]: param[i]})
+                else:
+                    df = df.rename(param[i])
+            fig = px.line(
+                data_frame = df,
+                title = title,
+                labels = {"value" : "Değer", "index" : "Saniye"},
+                template="plotly_dark"
+            )
+            
+            graph_html = fig.to_html(full_html=True)
+            
+            return graph_html
+        else:
+            graph_html = "Veri bulunamadı!"
+            return graph_html
+    else:
+        graph_html = "Veri bulunamadı!"
+        return graph_html
 
 #import plotly.io as pio
 #pio.write_html(fig, file=html_file, auto_open=True)

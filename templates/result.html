@@ -24,7 +24,7 @@
     }
     header h1 {
       font-size: 26px;
-      color: #58a6ff;
+      color: #ec3a40;
       margin: 0;
     }
     .container {
@@ -74,18 +74,50 @@
       color: #8b949e;
       font-size: 14px;
     }
+    .graph-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .graph-buttons a {
+      background: #ec3a40;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 6px;
+      margin: 0 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .graph-buttons a:hover {
+      background: #9a0c11ff;
+    }
   </style>
 </head>
 <body>
   <header>
     <img src="/static/vestel_logo.png" alt="Logo">
-    <h1>Analiz Sonuçları</h1>
+    <h1 style="white-space: pre;">                                                                                   Analiz Sonuçları</h1>
   </header>
+  <br><a href="/" style="background:#ec3a40; color:#fff; padding:6px 12px; border-radius:6px; text-decoration:none; font-weight:bold; margin-left:10px;">Başka bir dosya yükle</a></br>
+  <nav>
+    <div style="margin-top:10px;"></div>
+    <div class="graph-buttons">
+      <div style="font-size:18px; color:#fff; margin-bottom:10px;">Grafikler:</div>
+      <a href="/graph/Devir" target="_blank">Devir Grafiği</a>
+      <a href="/graph/Valf" target="_blank">Valf Grafiği</a>
+      <a href="/graph/Rezistans" target="_blank">Rezistans Grafiği</a>
+      <a href="/graph/Tahliye" target="_blank">Tahliye Grafiği</a>
+      <a href="/graph/Twinjet" target="_blank">Twinjet Grafiği</a>
+    </div>
+  </nav>
 
   <div class="container">
     <!-- Sıcaklık & Komponent -->
     <div class="section">
-      <h2>Sıcaklık & Komponent</h2>
+      <h2>
+        Sıcaklık & Komponent
+      </h2>
       <ul class="result-list">
         <li><span class="field-label">Maksimum Sıcaklık:</span> {{ result.sicaklik_komponent.max_sicaklik }}</li>
         <li><span class="field-label">Resistans Süresi:</span> {{ result.sicaklik_komponent.resistans_sure }}</li>
