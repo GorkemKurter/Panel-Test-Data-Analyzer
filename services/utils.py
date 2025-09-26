@@ -1,10 +1,13 @@
 import plotly.express as px
 import pandas as pd
-def format_valf_aktivasyon(data: dict) -> str:
+def format_valf_aktivasyon_valf(data: dict, extra_list: list) -> str:
     formatted_lines = []
-    for key, values in data.items():
+    for i, (key, values) in enumerate(data.items()):
         values_str = ", ".join(map(str, values))
-        formatted_lines.append(f"<strong style='text-decoration: underline; color:#ec3a40ff'>{key}:<br></strong>{values_str}")
+        extra = f", {extra_list[i]} saniye boyunca" if i < len(extra_list) else ""
+        formatted_lines.append(
+            f"<strong style='text-decoration: underline; color:#ec3a40ff'>{key}:<br></strong>{values_str}{extra}"
+        )
     return "<br><br>".join(formatted_lines)
 
 def list_format_sn(data: list) -> str:
@@ -47,3 +50,10 @@ def graph_plotter(df, param, title):
 
 #import plotly.io as pio
 #pio.write_html(fig, file=html_file, auto_open=True)
+
+def format_valf_aktivasyon(data: dict) -> str:
+    formatted_lines = []
+    for key, values in data.items():
+        values_str = ", ".join(map(str, values))
+        formatted_lines.append(f"<strong style='text-decoration: underline; color:#ec3a40ff'>{key}:<br></strong>{values_str}")
+    return "<br><br>".join(formatted_lines)

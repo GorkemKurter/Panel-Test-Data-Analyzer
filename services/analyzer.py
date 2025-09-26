@@ -1,5 +1,5 @@
 import pandas as pd
-from services.utils import format_valf_aktivasyon, list_format_sn, np_solver_lt, graph_plotter, np_solver_rpm
+from services.utils import format_valf_aktivasyon, list_format_sn, np_solver_lt, graph_plotter, np_solver_rpm, format_valf_aktivasyon_valf
 def analyze_data(df: pd.DataFrame, columns: dict):
     """
     Verilen dataframe'den rapor sonuçlarını çıkarır.
@@ -56,6 +56,7 @@ def analyze_data(df: pd.DataFrame, columns: dict):
             "off_sure": f"{twinjet_off:.2f} dk" if twinjet_off else "N/A",
         }
     }
+########## Report 2 ##########
 
 #    su_valf = df[columns["su_valf"]]
 #    su_valf_on = (su_valf > 0).sum()
@@ -85,6 +86,9 @@ def analyze_data(df: pd.DataFrame, columns: dict):
         valf_activation = list()
         water_consumption = list()
         local_valf_activation = list()
+        overall_valf_activation = list()
+        overall_local_valf_activation = list()
+        total = 0
         total_valf_activation = len(valf_data[valf_data > 0]) / 60
         for i in range(len(valf_data)):
             if len(valf_data) == len(water_data):
@@ -103,14 +107,23 @@ def analyze_data(df: pd.DataFrame, columns: dict):
                     local_valf_activation = list()
             else:
                 print("Valf verileri ile su verileri eşleşmiyor.")
-            
             valf_work_steps = list()
             for i in range(len(valf_activation)):
                 valf_work_steps.append(len(valf_activation[i]))
             
-            valf_activation_sequences = {}
-            for i,seq in enumerate(valf_activation, start=1):
-                valf_activation_sequences[f'{i}. Aktivasyon'] = [float(x) for x in seq]
+        for val_all in valf_activation:
+            for val in val_all:
+                if val > 1.0:
+                    total += val
+            total = total / len(val_all)
+            if total > 1.0:
+                overall_local_valf_activation.append(total)
+                overall_valf_activation.append(overall_local_valf_activation)
+            total = 0
+            overall_local_valf_activation = list()
+        valf_activation_sequences = {}
+        for i,seq in enumerate(overall_valf_activation, start=1):
+            valf_activation_sequences[f'{i}. Aktivasyon'] = [round(float(x), 2) for x in seq]
     elif water_data is not None and valf_data is None:
         water_consumption = None
     else:
@@ -118,9 +131,9 @@ def analyze_data(df: pd.DataFrame, columns: dict):
         water_consumption = None            
         total_valf_activation = None
         valf_activation_sequences = None
-
+    print(valf_activation)
     report2 = {
-        "lokal_valf_aktivasyonları": format_valf_aktivasyon(valf_activation_sequences) if valf_activation_sequences else "N/A",
+        "lokal_valf_aktivasyonları": format_valf_aktivasyon_valf(valf_activation_sequences, valf_work_steps) if valf_activation_sequences else "N/A",
         "toplam_su_tüketimi": f"{total_water_consumption} lt" if total_water_consumption else "N/A",
         "valf_çalışma_süreleri": f"{list_format_sn(valf_work_steps)}" if valf_work_steps else "N/A",
         "lokal_su_tüketimi": np_solver_lt(water_consumption) if water_consumption else "N/A",
@@ -166,6 +179,9 @@ def analyze_data(df: pd.DataFrame, columns: dict):
         motor_movement = None
     
     if columns['rpm'] is not None:
+        total = 0
+        
+        
         motor_agitation_sequences = {}
         for i,seq in enumerate(agitation_list, start=1):
             motor_agitation_sequences[f'{i}. Ajitasyon'] = [float(x) for x in seq]
