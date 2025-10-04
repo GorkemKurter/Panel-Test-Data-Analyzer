@@ -1,3 +1,9 @@
+#Debi ortalama verisi
+#Debi değerleri 1 altı ihmal
+#Su alımı ve motor verisi için anayıkama ve durulama faz ayrımı
+#Max rpm yükseldiği ve bittiği süre toplamı
+#Tüm ajitasyonlar için rpm, motor on ve off süresi, toplam ajitasyon süresi
+
 import pandas as pd
 from services.utils import format_valf_aktivasyon, list_format_sn, np_solver_lt, graph_plotter, np_solver_rpm, format_valf_aktivasyon_valf
 def analyze_data(df: pd.DataFrame, columns: dict):
@@ -92,15 +98,15 @@ def analyze_data(df: pd.DataFrame, columns: dict):
         total_valf_activation = len(valf_data[valf_data > 0]) / 60
         for i in range(len(valf_data)):
             if len(valf_data) == len(water_data):
-                if valf_data.iloc[i] > 0 and i !=0 and i != len(valf_data)-1:
+                if valf_data.iloc[i] > 1.0 and i !=0 and i != len(valf_data)-1:
                     local_valf_activation.append(valf_data.iloc[i])
                 elif (valf_data.iloc[i-1] > 0) and (valf_data.iloc[i] == 0) and (i !=0):
                     valf_activation.append(local_valf_activation)
                     water_consumption.append(water_data.iloc[i])
                     local_valf_activation = list()
-                elif i == 0 and valf_data.iloc[i] > 0:
+                elif i == 0 and valf_data.iloc[i] > 1.0:
                     local_valf_activation.append(valf_data.iloc[i])
-                elif i == len(valf_data) - 1 and valf_data.iloc[i] > 0:
+                elif i == len(valf_data) - 1 and valf_data.iloc[i] > 1.0:
                     local_valf_activation.append(valf_data.iloc[i])
                     valf_activation.append(local_valf_activation)
                     water_consumption.append(water_data.iloc[i])
@@ -110,13 +116,19 @@ def analyze_data(df: pd.DataFrame, columns: dict):
             valf_work_steps = list()
             for i in range(len(valf_activation)):
                 valf_work_steps.append(len(valf_activation[i]))
-            
+
+        for idx, x in enumerate(valf_activation):
+            if len(x) < 2 :
+                valf_activation.remove(x)
+                water_consumption.pop(idx)
+                valf_work_steps.pop(idx)
+                total_valf_activation = len(valf_data[valf_data > 0]) / 60
         for val_all in valf_activation:
             for val in val_all:
                 if val > 1.0:
                     total += val
-            total = total / len(val_all)
-            if total > 1.0:
+            if len(val_all) > 0:
+                total = total / len(val_all)
                 overall_local_valf_activation.append(total)
                 overall_valf_activation.append(overall_local_valf_activation)
             total = 0
@@ -131,11 +143,9 @@ def analyze_data(df: pd.DataFrame, columns: dict):
         water_consumption = None            
         total_valf_activation = None
         valf_activation_sequences = None
-    print(valf_activation)
     report2 = {
         "lokal_valf_aktivasyonları": format_valf_aktivasyon_valf(valf_activation_sequences, valf_work_steps) if valf_activation_sequences else "N/A",
         "toplam_su_tüketimi": f"{total_water_consumption} lt" if total_water_consumption else "N/A",
-        "valf_çalışma_süreleri": f"{list_format_sn(valf_work_steps)}" if valf_work_steps else "N/A",
         "lokal_su_tüketimi": np_solver_lt(water_consumption) if water_consumption else "N/A",
         "toplam_valf_aktivasyonu": f"{total_valf_activation} dk" if total_valf_activation else "N/A"
     }

@@ -1,12 +1,13 @@
 import plotly.express as px
 import pandas as pd
-def format_valf_aktivasyon_valf(data: dict, extra_list: list) -> str:
+def format_valf_aktivasyon_valf(data: dict, extra_list: list, last_list: list) -> str:
     formatted_lines = []
     for i, (key, values) in enumerate(data.items()):
         values_str = ", ".join(map(str, values))
         extra = f", {extra_list[i]} saniye boyunca" if i < len(extra_list) else ""
+        last = f", {last_list[i]} saniye sonunda" if i < len(last_list) else ""
         formatted_lines.append(
-            f"<strong style='text-decoration: underline; color:#ec3a40ff'>{key}:<br></strong>{values_str}{extra}"
+            f"<strong style='text-decoration: underline; color:#ec3a40ff'>{key}:<br></strong>{values_str}{extra}{last}"
         )
     return "<br><br>".join(formatted_lines)
 
